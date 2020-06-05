@@ -1,5 +1,5 @@
 {
-  "name": "serverless-latest-layer-version",
+  "name": "@iesde/serverless-latest-layer-version",
   "version": "2.1.0",
   "description": "A serverless plugin that replaces 'latest' version tag to actual lambda layer version",
   "main": "index.js",
