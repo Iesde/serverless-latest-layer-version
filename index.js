@@ -4,7 +4,9 @@
  * This Serverless plugin replaces 'latest' pseudo version tag to actual latest version
  */
 
-const { Lambda } = require('aws-sdk');
+//const { Lambda } = require('aws-sdk');
+
+let Lambda = null;
 const traverse = require('traverse');
 const util = require('util');
 
@@ -12,6 +14,9 @@ class ServerlessPlugin {
   constructor(serverless, options) {
     this.serverless = serverless;
     this.options = options;
+
+    const awsCreds = Object.assign({}, this.serverless.providers.aws.getCredentials(), { region: this.serverless.service.provider.region })
+    Lambda = new this.serverless.providers.aws.sdk.Lambda(awsCreds)
 
     this.hooks = {
       'after:aws:package:finalize:mergeCustomProviderResources': this.updateCFNLayerVersion.bind(this),
@@ -83,7 +88,7 @@ class ServerlessPlugin {
       return null;
     }
 
-    const lambda = new Lambda({ region: layer.region });
+    const lambda = Lambda
 
     const versions = [];
 
